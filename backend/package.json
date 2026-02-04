@@ -1,0 +1,16 @@
+{
+  "name": "flight-search-backend",
+  "version": "1.0.0",
+  "main": "dist/handler.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+    
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "typescript": "^5.3.3"
+  }
+}

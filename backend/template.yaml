@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Flight search backend - API Gateway + Lambda
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 10
+    MemorySize: 128
+
+Resources:
+  SearchFlightsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: search-flights
+      Handler: dist/handler.handler   # after TS build, e.g. dist/handler.js exports "handler"
+      CodeUri: .
+      Description: Lambda to search flights by from/to/date
+      Events:
+        ApiGetFlights:
+          Type: Api
+          Properties:
+            Path: /flights
+            Method: GET
+            RestApiId: !Ref FlightSearchApi
+
+  FlightSearchApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: flight-search-api
+      StageName: prd
+      Cors:
+        AllowMethods: "'GET,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'*'"
+
+Outputs:
+  ApiUrl:
+    Description: 'Base URL for the Flight Search API'
+    Value: !Sub 'const API_BASE_URL = 'https://mwr3d41lej.execute-api.us-east-2.amazonaws.com/prd/flights';
+    
